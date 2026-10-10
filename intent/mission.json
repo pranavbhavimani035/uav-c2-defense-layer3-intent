@@ -1,0 +1,25 @@
+{
+    "schema_version": "1.0",
+    "mission_id": "PATROL_01",
+    "mission": "PATROL",
+    "max_altitude": 100,
+    "max_speed": 15,
+    "allowed_zone": "ZONE_A",
+    "allowed_waypoints": [
+        "WP1",
+        "WP2",
+        "WP3"
+    ],
+    "geofence": {
+        "min_x": 0,
+        "max_x": 100,
+        "min_y": 0,
+        "max_y": 100
+    },
+    "allowed_commands": [
+        "TAKEOFF",
+        "GOTO",
+        "LAND",
+        "RETURN_HOME"
+    ]
+}

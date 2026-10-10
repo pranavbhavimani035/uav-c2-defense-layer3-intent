@@ -1,0 +1,106 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "UAV Mission Intent Schema",
+    "description": "Formal schema for Layer 3 mission intent",
+    "type": "object",
+
+    "required": [
+        "schema_version",
+        "mission_id",
+        "mission",
+        "max_altitude",
+        "max_speed",
+        "allowed_zone",
+        "allowed_waypoints",
+        "geofence",
+        "allowed_commands"
+    ],
+
+    "properties": {
+
+        "schema_version": {
+            "type": "string"
+        },
+
+        "mission_id": {
+            "type": "string",
+            "minLength": 1
+        },
+
+        "mission": {
+            "type": "string",
+            "enum": [
+                "PATROL"
+            ]
+        },
+
+        "max_altitude": {
+            "type": "number",
+            "minimum": 0
+        },
+
+        "max_speed": {
+            "type": "number",
+            "minimum": 0
+        },
+
+        "allowed_zone": {
+            "type": "string",
+            "minLength": 1
+        },
+
+        "allowed_waypoints": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "minItems": 1
+        },
+
+        "geofence": {
+            "type": "object",
+
+            "required": [
+                "min_x",
+                "max_x",
+                "min_y",
+                "max_y"
+            ],
+
+            "properties": {
+
+                "min_x": {
+                    "type": "number"
+                },
+
+                "max_x": {
+                    "type": "number"
+                },
+
+                "min_y": {
+                    "type": "number"
+                },
+
+                "max_y": {
+                    "type": "number"
+                }
+            }
+        },
+
+        "allowed_commands": {
+            "type": "array",
+
+            "items": {
+                "type": "string",
+                "enum": [
+                    "TAKEOFF",
+                    "GOTO",
+                    "LAND",
+                    "RETURN_HOME"
+                ]
+            },
+
+            "minItems": 1
+        }
+    }
+}
