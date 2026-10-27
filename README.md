@@ -218,3 +218,60 @@ mission state management, security logging, and automated tests.
 The current automated test suite has passed in the local development
 environment. Integration with the other layers remains a separate
 project milestone.
+## Layer 3 Integration Interface
+
+### Purpose
+
+Layer 3 validates UAV commands against mission constraints and the current mission state before allowing them to proceed.
+
+### Function
+
+`authorize_command(command, mission, machine)`
+
+### Parameters
+
+* `command`: A dictionary containing the requested command and its parameters.
+* `mission`: A dictionary loaded from the mission configuration.
+* `machine`: An initialized `MissionStateMachine` instance.
+
+### Return Value
+
+The function returns a dictionary containing:
+
+* `result`: `ACCEPT` or `REJECT`
+* `reason`: Explanation for the decision
+* `state`: Current UAV state after processing the command
+* `state_message`: State-transition message for accepted commands
+
+### Expected Behavior
+
+1. Validate the command against mission constraints.
+2. Check whether the command is permitted in the current mission state.
+3. Reject invalid or unauthorized commands.
+4. Preserve the current state when a command is rejected.
+5. Return a structured decision for the integration module.
+
+### Example Usage
+
+```python
+import json
+
+from integration_interface import authorize_command
+from mission.state_machine import MissionStateMachine
+
+with open("intent/mission.json", "r", encoding="utf-8") as file:
+    mission = json.load(file)
+
+machine = MissionStateMachine()
+
+command = {
+    "type": "TAKEOFF",
+    "altitude": 80
+}
+
+result = authorize_command(command, mission, machine)
+
+print(result)
+```
+
+Run this example from the `layer3_intent` project directory.
