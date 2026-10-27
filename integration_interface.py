@@ -1,13 +1,17 @@
+
 from validator.validator import validate_command
 from mission.state_machine import MissionStateMachine
 
 
 def authorize_command(command, mission, machine):
     """
-    Check a UAV command against mission rules and the current UAV state.
+    Authorize a UAV command using mission rules and the current UAV state.
 
-    Returns a dictionary containing:
-    result, reason, and state.
+    Returns:
+        A dictionary containing:
+        - result: ACCEPT or REJECT
+        - reason: Explanation for the decision
+        - state: UAV state after the decision
     """
 
     # Step 1: Validate the command against mission rules.
@@ -20,8 +24,7 @@ def authorize_command(command, mission, machine):
             "state": machine.get_state()
         }
 
-    # Step 2: Check whether the command is allowed
-    # in the current mission state.
+    # Step 2: Check whether the command is allowed in the current state.
     allowed, state_message = machine.transition(command["type"])
 
     if not allowed:
@@ -35,5 +38,7 @@ def authorize_command(command, mission, machine):
     return {
         "result": "ACCEPT",
         "reason": reason,
-        "state": machine.get_state()
+        "state": machine.get_state(),
+        "state_message": state_message
     }
+

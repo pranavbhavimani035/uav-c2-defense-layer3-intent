@@ -69,8 +69,38 @@ class TestIntegrationInterface(unittest.TestCase):
 
         self.assertEqual(result["result"], "REJECT")
         self.assertEqual(result["state"], "CRUISE")
+        
+    def test_takeoff_while_cruising_is_rejected(self):
+        # First, move the UAV from IDLE to CRUISE.
+        self.machine.transition("TAKEOFF")
+
+        command = {
+            "type": "TAKEOFF",
+            "altitude": 80
+        }
+
+        result = authorize_command(
+            command, self.mission, self.machine
+        )
+
+        self.assertEqual(result["result"], "REJECT")
+        self.assertEqual(result["state"], "CRUISE")
+
+    def test_accepted_result_contains_state_message(self):
+        command = {
+            "type": "TAKEOFF",
+            "altitude": 80
+        }
+
+        result = authorize_command(
+            command, self.mission, self.machine
+        )
+
+        self.assertEqual(result["result"], "ACCEPT")
+        self.assertIn("state_message", result)
+        self.assertTrue(result["state_message"])
+
 
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
-    
